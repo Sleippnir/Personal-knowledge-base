@@ -1,4 +1,4 @@
-from pkm_gardener.orchestrator import ProcessingJob
+from pkm_gardener.types import ProcessingJob
 from pkm_gardener.utils.llm import get_llm_suggestions
 from pkm_gardener.utils.frontmatter import validate_and_normalize_metadata
 import os

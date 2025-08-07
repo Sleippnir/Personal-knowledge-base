@@ -1,6 +1,6 @@
 import os
 from pkm_gardener.config import INBOX_PATH
-from pkm_gardener.orchestrator import ProcessingJob
+from pkm_gardener.types import ProcessingJob
 
 def find_new_files() -> list[ProcessingJob]:
     """

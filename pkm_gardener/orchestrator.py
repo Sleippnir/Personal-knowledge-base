@@ -1,24 +1,9 @@
-from dataclasses import dataclass, field
-from typing import Optional, Dict, Any
 import os
 import shutil
 
 from pkm_gardener.config import INBOX_PATH, RESOURCES_PATH, AREAS_PATH, PROJECTS_PATH, DRY_RUN
 from pkm_gardener.core_modules import ingestor, text_processor, vision_processor, indexer, router
-
-@dataclass
-class ProcessingJob:
-    original_filepath: str
-    original_filename: str
-    content: str | bytes
-    file_type: str
-    metadata: Dict[str, Any] = field(default_factory=dict)
-    metadata_str: Optional[str] = None # To store the YAML string from LLM
-    suggested_filename: Optional[str] = None
-    suggested_folder_path: Optional[str] = None
-    summary: Optional[str] = None
-    status: str = "pending"  # 'pending', 'success', 'failure', 'needs_review'
-    error_message: Optional[str] = None
+from pkm_gardener.types import ProcessingJob
 
 def get_destination_folders():
     """Returns a list of all possible destination folders (relative to PKM_ROOT)."""

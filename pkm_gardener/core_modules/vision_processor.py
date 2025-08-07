@@ -1,4 +1,4 @@
-from pkm_gardener.orchestrator import ProcessingJob
+from pkm_gardener.types import ProcessingJob
 
 def process(job: ProcessingJob) -> ProcessingJob:
     """
