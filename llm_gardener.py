@@ -4,7 +4,20 @@ import google.generativeai as genai
 import yaml
 import re
 import string
-from api import GEMINI_API_KEY
+# --- Gemini API Configuration ---
+# The application will first try to load the API key from the `GEMINI_API_KEY` environment variable.
+# If it's not found, it will fall back to importing it from `api.py`.
+# This file is git-ignored for security.
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+if not GEMINI_API_KEY:
+    try:
+        from api import GEMINI_API_KEY as key_from_file
+        GEMINI_API_KEY = key_from_file
+    except (ImportError, AttributeError):
+        pass
+
+if not GEMINI_API_KEY:
+    raise ValueError("GEMINI_API_KEY is not set. Please set it as an environment variable or in `api.py`.")
 
 # --- Configuration ---
 PKM_ROOT = r"D:\PKM"  # Obsidian vault root

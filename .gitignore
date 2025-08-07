@@ -1,5 +1,7 @@
-api.py
 run_gardener.ps1
 .python-version
 pkmenv/ 
 .obsidian/workspace.json 
+
+# Local API key file
+pkm_gardener/api.py

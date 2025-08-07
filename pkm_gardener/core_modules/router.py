@@ -1,6 +1,6 @@
 import os
 import shutil
-from pkm_gardener.orchestrator import ProcessingJob
+from pkm_gardener.types import ProcessingJob
 from pkm_gardener.config import DRY_RUN
 from pkm_gardener.utils.filename import resolve_filename_conflict
 
