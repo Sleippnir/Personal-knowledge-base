@@ -15,13 +15,14 @@ def process(job: ProcessingJob, destination_folders_relative: list) -> Processin
         import yaml
         parsed_yaml = yaml.safe_load(yaml_frontmatter_str.replace("---\n", "").replace("---", ""))
         
+        job.metadata_str = yaml_frontmatter_str
         job.metadata = validate_and_normalize_metadata(parsed_yaml)
         job.suggested_folder_path = suggested_folder_absolute
         
         # Extract suggested filename and summary from metadata if available
         # For now, we'll use the original filename, but this can be enhanced later
         job.suggested_filename = job.original_filename
-        job.summary = job.metadata.get('summary', '') # Assuming LLM might provide a summary in metadata
+        job.summary = job.metadata.get('summary', '')
         
         job.status = "success"
 

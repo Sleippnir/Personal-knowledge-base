@@ -1,7 +1,7 @@
 import os
 
 # --- Paths ---
-PKM_ROOT = r"D:\PKM"
+PKM_ROOT = "."
 INBOX_PATH = os.path.join(PKM_ROOT, "00_Inbox")
 RESOURCES_PATH = os.path.join(PKM_ROOT, "03_Resources")
 AREAS_PATH = os.path.join(PKM_ROOT, "02_Areas")
@@ -22,7 +22,7 @@ if not GEMINI_API_KEY:
 if not GEMINI_API_KEY:
     raise ValueError("GEMINI_API_KEY is not set. Please set it as an environment variable or in `pkm_gardener/api.py`.")
 
-GEMINI_MODEL_NAME = "gemini-pro"
+GEMINI_MODEL_NAME = "gemini-1.5-flash-latest"
 
 # --- Processing Settings ---
 DRY_RUN = False # Set to True to simulate file operations without actually moving/modifying files

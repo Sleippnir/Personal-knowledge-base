@@ -20,7 +20,7 @@ if not GEMINI_API_KEY:
     raise ValueError("GEMINI_API_KEY is not set. Please set it as an environment variable or in `api.py`.")
 
 # --- Configuration ---
-PKM_ROOT = r"D:\PKM"  # Obsidian vault root
+PKM_ROOT = "."  # Obsidian vault root
 INBOX_PATH = os.path.join(PKM_ROOT, "00_Inbox")
 RESOURCES_PATH = os.path.join(PKM_ROOT, "03_Resources")
 AREAS_PATH = os.path.join(PKM_ROOT, "02_Areas")

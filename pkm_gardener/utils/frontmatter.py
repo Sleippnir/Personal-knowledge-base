@@ -21,6 +21,7 @@ def validate_and_normalize_metadata(metadata: dict) -> dict:
         'priority': 'P3',
         'type': 'unknown',
         'tags': [],
+        'summary': '',
         'source': ''
     }
 

@@ -1,2 +1,6 @@
 google-generativeai
 PyYAML
+PyMuPDF
+Pillow
+python-dotenv
+reportlab

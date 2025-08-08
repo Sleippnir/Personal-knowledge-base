@@ -41,15 +41,13 @@ def run_pipeline():
             if job.file_type == "text":
                 processed_job = text_processor.process(job, destination_folders_relative)
             elif job.file_type == "image" or job.file_type == "pdf":
-                processed_job = vision_processor.process(job) # Placeholder for vision processing
+                processed_job = vision_processor.process(job, destination_folders_relative)
             else:
                 job.status = "failure"
                 job.error_message = f"Unsupported file type: {job.file_type}"
                 processed_job = job
 
             if processed_job.status == "success":
-                # Store the YAML string from LLM for router
-                processed_job.metadata_str = processed_job.metadata.get('yaml_string_from_llm', '') 
                 indexer.update_index(processed_job)
                 router.file_note(processed_job)
             else:
