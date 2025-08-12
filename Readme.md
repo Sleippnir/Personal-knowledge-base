@@ -1,6 +1,4 @@
 
-
-````
 # 🧠 My Personal Knowledge Management (PKM) System
 
 This repository serves as a single source of truth for all my notes, projects, and resources. It is a living system designed for fast retrieval and active knowledge development, managed primarily with [Obsidian](https://obsidian.md/) and version-controlled with Git.
