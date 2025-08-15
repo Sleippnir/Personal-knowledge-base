@@ -1,11 +1,26 @@
 import os
 
 # --- Paths ---
-PKM_ROOT = r"D:\PKM"
+def find_pkm_root():
+    """
+    Finds the root of the PKM vault by searching upwards from the current directory
+    for a `.obsidian` folder.
+    """
+    current_dir = os.getcwd()
+    while True:
+        if ".obsidian" in os.listdir(current_dir):
+            return current_dir
+        parent_dir = os.path.dirname(current_dir)
+        if parent_dir == current_dir:
+            # Reached the filesystem root
+            raise FileNotFoundError("Could not find PKM root. No '.obsidian' directory found in any parent folder.")
+        current_dir = parent_dir
+
+PKM_ROOT = find_pkm_root()
 INBOX_PATH = os.path.join(PKM_ROOT, "00_Inbox")
 RESOURCES_PATH = os.path.join(PKM_ROOT, "03_Resources")
 AREAS_PATH = os.path.join(PKM_ROOT, "02_Areas")
-PROJECTS_PATH = os.path.join(PKM_ROOT, "01_Projects") # Added for completeness
+PROJECTS_PATH = os.path.join(PKM_ROOT, "01_Projects")
 
 # --- Gemini API Configuration ---
 # The application will first try to load the API key from the `GEMINI_API_KEY` environment variable.
