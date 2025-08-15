@@ -48,8 +48,6 @@ def run_pipeline():
                 processed_job = job
 
             if processed_job.status == "success":
-                # Store the YAML string from LLM for router
-                processed_job.metadata_str = processed_job.metadata.get('yaml_string_from_llm', '') 
                 indexer.update_index(processed_job)
                 router.file_note(processed_job)
             else:
