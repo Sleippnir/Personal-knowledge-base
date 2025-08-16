@@ -81,7 +81,8 @@ Do not add any explanation. Output only the four requested items, each on its ow
         valid_folders.add("00_inbox") # Add inbox as a valid destination
         if suggested_folder_relative.lower() not in valid_folders:
             print(f"Warning: Invalid folder '{suggested_folder_relative}'. Defaulting to 00_Inbox.")
-            suggested_folder_relative = "00_Inbox"
+            print(f"Warning: Invalid folder '{suggested_folder_relative}'. Defaulting to 00_inbox.")
+            suggested_folder_relative = "00_inbox"
             parsed_yaml['status'] = 'triage'
             if 'tags' not in parsed_yaml:
                 parsed_yaml['tags'] = []
