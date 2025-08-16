@@ -36,7 +36,20 @@ def file_note(job: ProcessingJob):
     # 4. Construct the final content of the note
     frontmatter_str = construct_frontmatter_string(job.metadata)
     # Ensure content is a string for concatenation
-    content_str = job.content.decode('utf-8') if isinstance(job.content, bytes) else job.content
+    if isinstance(job.content, bytes):
+        content_str = job.content.decode('utf-8')
+    elif isinstance(job.content, str):
+        content_str = job.content
+    elif job.content is None:
+        job.status = "failure"
+        job.error_message = "Missing content for routing."
+        print(f"Error: {job.error_message}")
+        return
+    else:
+        job.status = "failure"
+        job.error_message = f"Unsupported content type: {type(job.content)}"
+        print(f"Error: {job.error_message}")
+        return
     final_content = f"{frontmatter_str}\n{content_str}"
 
     print(f"Action: Routing '{job.original_filename}' to '{final_filepath}'")
