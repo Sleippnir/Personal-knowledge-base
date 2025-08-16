@@ -8,6 +8,8 @@ def find_new_files() -> list[ProcessingJob]:
     """
     jobs = []
     for file_name in os.listdir(INBOX_PATH):
+        if file_name.startswith('.'):
+            continue
         file_path = os.path.join(INBOX_PATH, file_name)
         if os.path.isfile(file_path):
             # Determine file type (simple for now, can be expanded)
