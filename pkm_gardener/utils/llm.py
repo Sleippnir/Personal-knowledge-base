@@ -84,7 +84,7 @@ Do not add any explanation. Output only the four requested items, each on its ow
             print(f"Warning: Invalid folder '{suggested_folder_relative}'. Defaulting to 00_inbox.")
             suggested_folder_relative = "00_inbox"
             parsed_yaml['status'] = 'triage'
-            if 'tags' not in parsed_yaml:
+            if 'tags' not in parsed_yaml or not isinstance(parsed_yaml['tags'], list):
                 parsed_yaml['tags'] = []
             if '#needs-review' not in parsed_yaml['tags']:
                 parsed_yaml['tags'].append('#needs-review')
