@@ -27,7 +27,7 @@ def process(job: ProcessingJob, destination_folders_relative: list) -> Processin
             content_for_llm = get_csv_summary(job.content)
         else:
             # For other document types, just use the raw content if it's not too large
-            if len(job.content) < 10000: # Simple size check
+            if len(job.content) < MAX_DOCUMENT_SIZE_FOR_PROCESSING: # Simple size check
                 content_for_llm = job.content.decode('utf-8', errors='ignore')
             else:
                 content_for_llm = f"Document of type {job.file_type} is too large to process."
