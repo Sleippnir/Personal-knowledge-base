@@ -35,7 +35,6 @@ def find_new_files() -> list[ProcessingJob]:
         if os.path.isfile(file_path):
             file_type = get_file_type(file_path)
 
-            content = b''
             try:
                 with open(file_path, 'rb') as f:
                     content = f.read()
