@@ -15,7 +15,13 @@ def get_file_type(file_path: str) -> str:
                 f.read(1024)  # Try to read some of the file
             # Check for specific text types like CSV
             if file_path.endswith('.csv'):
-                return "csv"
+        # Check for specific text types like CSV before reading the file
+        if file_path.endswith('.csv'):
+            return "csv"
+        # Fallback for plain text files that filetype might not recognize
+        try:
+            with open(file_path, 'r', encoding='utf-8') as f:
+                f.read(1024)  # Try to read some of the file
             return "text"
         except UnicodeDecodeError:
             return "document"  # It's some other binary format
