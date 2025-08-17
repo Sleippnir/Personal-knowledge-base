@@ -101,4 +101,4 @@ Do not add any explanation. Output only the five requested items, each on its ow
             'confidence_score': 0.0,
             'title': 'Untitled'
         }
-        return fallback_yaml, "Untitled", "unnamed-file.md", "00_Inbox", "Could not be processed."
+        return fallback_yaml, "Untitled", "00_Inbox", "unnamed-file.md", "Could not be processed."
