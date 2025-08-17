@@ -8,28 +8,26 @@ model = genai.GenerativeModel(GEMINI_MODEL_NAME)
 
 def get_llm_suggestions(
     file_content: str, destination_folders_relative: list
-) -> tuple[dict, str, str, str, str]:
+) -> tuple[dict, str, str, str, str, str]:
     """
     Uses the Gemini API to get YAML frontmatter, a suggested filename, folder, and summary.
-    Returns a tuple of: (parsed_metadata, title, suggested_filename, suggested_folder_relative, summary)
+    Returns a tuple of: (parsed_metadata, title, suggested_filename, suggested_folder_relative, summary, status)
     """
     print("\n--- Sending to LLM ---")
 
-    prompt = f"""You are an expert librarian and metadata specialist. Your task is to analyze the provided content and generate five items in a strict, specific format.
+    prompt = f"""You are an expert librarian and metadata specialist. Your task is to analyze the provided content and generate four items in a strict, specific format.
 
 **Instructions:**
-1.  **Generate YAML Frontmatter:** Create a valid YAML block with detailed metadata.
-2.  **Generate a Title:** Create a concise, descriptive title for the content.
-3.  **Generate a Summary:** Write a one-paragraph summary of the content.
-4.  **Suggest a Folder:** Suggest a relative folder path from the provided list. If no suitable folder exists, suggest a new, logical folder path within the PARA structure (e.g., `01_Projects/New-Project-Name`).
-5.  **Suggest a Filename:** Suggest a filename in kebab-case (e.g., `deep-learning-cheatsheet.md`).
+1.  **Generate YAML Frontmatter:** Create a valid YAML block with detailed metadata, including a `title`.
+2.  **Generate a Summary:** Write a one-paragraph summary of the content.
+3.  **Suggest a Folder:** Suggest a relative folder path from the provided list. If no suitable folder exists, suggest a new, logical folder path within the PARA structure (e.g., `01_Projects/New-Project-Name`).
+4.  **Suggest a Filename:** Suggest a filename in kebab-case (e.g., `deep-learning-cheatsheet.md`).
 
-**Return these five items, each on a new line, in the following strict order:**
+**Return these four items, each on a new line, in the following strict order:**
 ```
 ---
 <yaml-keys-and-values>
 ---
-Title of the Note
 A one-paragraph summary of the note content.
 relative/path/to/folder
 suggested-filename.md
@@ -62,7 +60,7 @@ suggested-filename.md
 {destination_folders_relative}
 ```
 
-Do not add any explanation. Output only the five requested items, each on its own line, in the specified order.
+Do not add any explanation. Output only the four requested items, each on its own line, in the specified order.
 """
 
     try:
@@ -71,23 +69,32 @@ Do not add any explanation. Output only the five requested items, each on its ow
         print("--- LLM Raw Response ---")
         print(llm_output)
 
-        match = re.search(
-            r'^---\n(.*?)\n---\n(.*?)\n(.*?)\n(.*?)\n(.*?)$', llm_output, re.DOTALL
-        )
-        if not match:
-            raise ValueError("LLM output did not match the expected 5-part format.")
+        # More robust parsing
+        # 1. Find the YAML block
+        yaml_match = re.search(r'^---\s*\n(.*?)\n\s*---', llm_output, re.DOTALL)
+        if not yaml_match:
+            raise ValueError("LLM output did not contain a valid YAML block.")
 
-        yaml_body = match.group(1).strip()
-        title = match.group(2).strip()
-        summary = match.group(3).strip()
-        suggested_folder_relative = match.group(4).strip()
-        suggested_filename = match.group(5).strip()
-
+        yaml_body = yaml_match.group(1).strip()
         parsed_yaml = yaml.safe_load(yaml_body)
         if not isinstance(parsed_yaml, dict):
             raise ValueError("LLM output YAML is not a valid dictionary.")
 
-        return parsed_metadata, title, suggested_filename, suggested_folder_relative, summary
+        # 2. Get the rest of the content and split into parts
+        rest_of_output = llm_output[yaml_match.end():].strip()
+        parts = [line.strip() for line in rest_of_output.split('\n') if line.strip()]
+
+        if len(parts) != 3:
+            raise ValueError(f"Expected 3 parts after YAML (summary, folder, filename), but got {len(parts)}: {parts}")
+
+        summary = parts[0]
+        suggested_folder_relative = parts[1]
+        suggested_filename = parts[2]
+
+        # 3. Get title from YAML
+        title = parsed_yaml.get('title', 'Untitled')
+
+        return parsed_yaml, title, suggested_filename, suggested_folder_relative, summary, "success"
 
     except Exception as e:
         print(f"Error during LLM call or parsing: {e}")
@@ -101,4 +108,4 @@ Do not add any explanation. Output only the five requested items, each on its ow
             'confidence_score': 0.0,
             'title': 'Untitled'
         }
-        return fallback_yaml, "Untitled", "unnamed-file.md", "00_Inbox", "Could not be processed."
+        return fallback_yaml, "Untitled", "unnamed-file.md", "00_Inbox", "Could not be processed.", "failure"

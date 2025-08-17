@@ -1,14 +1,44 @@
 import os
-import magic
+import filetype
 from pkm_gardener.config import INBOX_PATH
 from pkm_gardener.types import ProcessingJob
 
 def get_file_type(file_path: str) -> str:
     """
-    Determines the file type using python-magic.
+    Determines the file type using the filetype library, with a fallback for text.
     """
-    mime = magic.Magic(mime=True)
-    mime_type = mime.from_file(file_path)
+    kind = filetype.guess(file_path)
+    if kind is None:
+        # Fallback for plain text files that filetype might not recognize
+        try:
+            with open(file_path, 'r', encoding='utf-8') as f:
+                f.read(1024)  # Try to read some of the file
+            # Check for specific text types like CSV
+            if file_path.endswith('.csv'):
+        # Check for specific text types like CSV before reading the file
+        if file_path.endswith('.csv'):
+            return "csv"
+        # Fallback for plain text files that filetype might not recognize
+        try:
+            with open(file_path, 'r', encoding='utf-8') as f:
+                f.read(1024)  # Try to read some of the file
+            return "text"
+        except UnicodeDecodeError:
+            return "document"  # It's some other binary format
+        # Fallback: use file extension to determine file type
+        ext = os.path.splitext(file_path)[1].lower()
+        if ext == '.csv':
+            return "csv"
+        elif ext in ['.txt', '.md', '.rst']:
+            return "text"
+        elif ext in ['.pdf']:
+            return "pdf"
+        elif ext in ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff']:
+            return "image"
+        else:
+            return "document"
+
+    mime_type = kind.mime
     if mime_type.startswith("image"):
         return "image"
     elif mime_type == "application/pdf":
