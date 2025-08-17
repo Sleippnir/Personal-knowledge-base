@@ -2,7 +2,7 @@ import os
 import shutil
 
 from pkm_gardener.config import INBOX_PATH, RESOURCES_PATH, AREAS_PATH, PROJECTS_PATH, DRY_RUN
-from pkm_gardener.core_modules import ingestor, text_processor, vision_processor, indexer, router
+from pkm_gardener.core_modules import ingestor, text_processor, vision_processor, document_processor, indexer, router
 from pkm_gardener.types import ProcessingJob
 
 def get_destination_folders():
@@ -40,8 +40,10 @@ def run_pipeline():
         try:
             if job.file_type == "text":
                 processed_job = text_processor.process(job, destination_folders_relative)
-            elif job.file_type == "image" or job.file_type == "pdf":
-                processed_job = vision_processor.process(job) # Placeholder for vision processing
+            elif job.file_type in ["image", "pdf"]:
+                processed_job = vision_processor.process(job, destination_folders_relative)
+            elif job.file_type in ["csv", "document"]:
+                processed_job = document_processor.process(job, destination_folders_relative)
             else:
                 job.status = "failure"
                 job.error_message = f"Unsupported file type: {job.file_type}"
