@@ -16,6 +16,7 @@ def find_pkm_root():
             raise FileNotFoundError("Could not find PKM root. No '.obsidian' directory found in any parent folder.")
         current_dir = parent_dir
 
+MAX_DOCUMENT_SIZE_FOR_PROCESSING = 1000
 PKM_ROOT = find_pkm_root()
 INBOX_PATH = os.path.join(PKM_ROOT, "00_Inbox")
 RESOURCES_PATH = os.path.join(PKM_ROOT, "03_Resources")
