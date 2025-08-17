@@ -5,3 +5,7 @@ pkmenv/
 
 # Local API key file
 pkm_gardener/api.py
+
+# Python cache
+__pycache__/
+*.pyc

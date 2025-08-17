@@ -2,5 +2,5 @@ google-generativeai
 PyYAML
 PyMuPDF
 Pillow
-python-magic
+filetype
 pandas
