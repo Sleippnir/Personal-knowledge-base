@@ -6,6 +6,7 @@ from pkm_gardener.types import ProcessingJob
 from pkm_gardener.utils.llm import get_llm_suggestions
 from pkm_gardener.utils.frontmatter import validate_and_normalize_metadata
 from pkm_gardener.config import PKM_ROOT
+from pkm_gardener.config import MAX_DOCUMENT_SIZE_FOR_PROCESSING
 
 def get_csv_summary(csv_bytes: bytes) -> str:
     """
