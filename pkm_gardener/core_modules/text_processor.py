@@ -9,22 +9,22 @@ def process(job: ProcessingJob, destination_folders_relative: list) -> Processin
     """
     Processes a text-based file by getting suggestions from the LLM and populating the job object.
     """
-    if not isinstance(job.content, str):
-        job.status = "failure"
-        job.error_message = "Content is not text, cannot process with text_processor."
-        return job
-
     try:
+        # Decode content from bytes to string
+        content_str = job.content.decode('utf-8', errors='ignore')
+
         # 1. Get suggestions from the LLM utility
         (
             parsed_metadata,
+            title,
             suggested_filename,
             suggested_folder_relative,
             summary,
-        ) = get_llm_suggestions(job.content, destination_folders_relative)
+        ) = get_llm_suggestions(content_str, destination_folders_relative)
 
         # 2. Validate and normalize the metadata
         job.metadata = validate_and_normalize_metadata(parsed_metadata)
+        job.metadata['title'] = title # Add title to metadata
 
         # 3. Populate the job object with the new data
         job.suggested_filename = suggested_filename
