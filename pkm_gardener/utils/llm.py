@@ -87,7 +87,7 @@ Do not add any explanation. Output only the five requested items, each on its ow
         if not isinstance(parsed_yaml, dict):
             raise ValueError("LLM output YAML is not a valid dictionary.")
 
-        return parsed_yaml, title, suggested_filename, suggested_folder_relative, summary
+        return parsed_metadata, title, suggested_filename, suggested_folder_relative, summary
 
     except Exception as e:
         print(f"Error during LLM call or parsing: {e}")
