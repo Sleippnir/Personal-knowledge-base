@@ -25,7 +25,17 @@ def get_file_type(file_path: str) -> str:
             return "text"
         except UnicodeDecodeError:
             return "document"  # It's some other binary format
-        except Exception:
+        # Fallback: use file extension to determine file type
+        ext = os.path.splitext(file_path)[1].lower()
+        if ext == '.csv':
+            return "csv"
+        elif ext in ['.txt', '.md', '.rst']:
+            return "text"
+        elif ext in ['.pdf']:
+            return "pdf"
+        elif ext in ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff']:
+            return "image"
+        else:
             return "document"
 
     mime_type = kind.mime
