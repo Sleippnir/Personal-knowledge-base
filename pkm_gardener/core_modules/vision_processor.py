@@ -10,7 +10,7 @@ from pkm_gardener.utils.frontmatter import validate_and_normalize_metadata
 from pkm_gardener.config import PKM_ROOT, GEMINI_API_KEY, GEMINI_MODEL_NAME
 
 genai.configure(api_key=GEMINI_API_KEY)
-vision_model = genai.GenerativeModel("gemini-pro-vision")
+vision_model = genai.GenerativeModel(GEMINI_MODEL_NAME)
 
 def get_image_description(image_bytes: bytes) -> str:
     """
